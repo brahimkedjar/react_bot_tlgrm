@@ -3,12 +3,14 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAarGT4dQezrVqbDCQh3zZ6LIE-L6E77K8",
-  authDomain: "sgovs-abf1f.firebaseapp.com",
-  projectId: "sgovs-abf1f",
-  storageBucket: "sgovs-abf1f.appspot.com",
-  messagingSenderId: "204434892234",
-  appId: "1:204434892234:web:6e16fa22105377ac665b33"
+    apiKey: "AIzaSyAlRQ6LDZQRzJ1lhGJV7tPuQE8hZIaBkSQ",
+    authDomain: "scriptvfs.firebaseapp.com",
+    databaseURL: "https://scriptvfs-default-rtdb.firebaseio.com",
+    projectId: "scriptvfs",
+    storageBucket: "scriptvfs.appspot.com",
+    messagingSenderId: "560062615085",
+    appId: "1:560062615085:web:d924d5f697a14d76cdf2a4",
+    measurementId: "G-LDM0THXZHX"
  
 };
 
