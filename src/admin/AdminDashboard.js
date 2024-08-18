@@ -28,7 +28,7 @@ export default function AdminDashboard() {
     setDescription('');
   };
 
-  const handleUpdateGame = async () => {
+  /*const handleUpdateGame = async () => {
     if (selectedGame) {
       const updatedGame = { name, image, description };
       await updateGame(selectedGame.id, updatedGame);
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
       setImage('');
       setDescription('');
     }
-  };
+  };*/
 
   const handleDeleteGame = async (gameId) => {
     await deleteGame(gameId);
