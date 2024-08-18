@@ -65,9 +65,9 @@ export default function UserDashboard() {
         variant="h3" 
         gutterBottom 
         align="center" 
-        style={{ fontWeight: 'bold', marginBottom: '40px', color: '#3f51b5', textTransform: 'uppercase', letterSpacing: '2px' }}
+        style={{ fontWeight: 'bold', marginBottom: '15px', color: '#3f51b5', textTransform: 'uppercase', letterSpacing: '2px' }}
       >
-        Available Games
+        Available Games By Brahim Kedjar 
       </Typography>
       <Grid container spacing={4}>
         {games.map((game) => (
