@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Typography, Grid, Card, CardContent, CardActions } from '@mui/material';
 import ComboManagement from './ComboManagement';
-import { addGame, deleteGame, getGames, updateGame } from './firebase';
+import { addGame, deleteGame, getGames } from './firebase';
 
 export default function AdminDashboard() {
   const [name, setName] = useState('');
