@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Card, CardContent, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, Zoom, Slide } from '@mui/material';
+import { Container, Grid, Card, CardContent, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, Zoom, Slide, TextField } from '@mui/material';
 import { collection, getDocs, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -67,7 +67,7 @@ export default function UserDashboard() {
         align="center" 
         style={{ fontWeight: 'bold', marginBottom: '15px', color: '#3f51b5', textTransform: 'uppercase', letterSpacing: '2px' }}
       >
-        Available Games By Brahim Kedjar 
+        Available Games By Brahim Kedjar Dev
       </Typography>
       <Grid container spacing={4}>
         {games.map((game) => (
@@ -165,24 +165,12 @@ export default function UserDashboard() {
                         style={{ 
                           borderRadius: '15px', 
                           overflow: 'hidden', 
-                          boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)', 
+                          cursor: 'pointer', 
                           transition: 'transform 0.3s ease-in-out', 
-                          transform: 'scale(1)', 
                           '&:hover': { transform: 'scale(1.05)' } 
                         }} 
                         onClick={() => handleOpenComboContent(combo)}
                       >
-                        <img 
-                          src={combo.mediaUrl} 
-                          alt={combo.name} 
-                          style={{ 
-                            width: '100%', 
-                            height: '150px', 
-                            objectFit: 'cover', 
-                            filter: 'brightness(90%)', 
-                            transition: 'filter 0.3s ease-in-out' 
-                          }} 
-                        />
                         <CardContent style={{ padding: '15px', textAlign: 'center' }}>
                           <Typography 
                             variant="subtitle1" 
@@ -195,6 +183,22 @@ export default function UserDashboard() {
                           >
                             {combo.name}
                           </Typography>
+                          {combo.mediaUrl && (
+                            <img 
+                              src={combo.mediaUrl} 
+                              alt={combo.name} 
+                              style={{ 
+                                width: '100%', 
+                                height: '150px', 
+                                objectFit: 'cover', 
+                                borderRadius: '10px', 
+                                filter: 'brightness(90%)', 
+                                transition: 'filter 0.3s ease-in-out', 
+                                cursor: 'pointer'
+                              }} 
+                              onClick={() => handleOpenMediaDialog(combo.mediaUrl)}
+                            />
+                          )}
                           {combo.content && (
                             <Typography 
                               variant="body2" 
