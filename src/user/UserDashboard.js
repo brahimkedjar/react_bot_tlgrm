@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Card, CardContent, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, Zoom, Slide } from '@mui/material';
+import { Container, Grid, Card, CardContent, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, Zoom, Slide ,TextField} from '@mui/material';
 import { collection, getDocs, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -9,6 +9,8 @@ export default function UserDashboard() {
   const [isComboDialogOpen, setIsComboDialogOpen] = useState(false);
   const [selectedCombo, setSelectedCombo] = useState(null);
   const [isComboContentDialogOpen, setIsComboContentDialogOpen] = useState(false);
+  const [mediaUrl, setMediaUrl] = useState(null);
+  const [isMediaDialogOpen, setIsMediaDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -45,6 +47,21 @@ export default function UserDashboard() {
   const handleCloseComboContent = () => {
     setIsComboContentDialogOpen(false);
     setSelectedCombo(null);
+  };
+
+  const handleOpenMediaDialog = (url) => {
+    setMediaUrl(url);
+    setIsMediaDialogOpen(true);
+  };
+
+  const handleCloseMediaDialog = () => {
+    setIsMediaDialogOpen(false);
+    setMediaUrl(null);
+  };
+
+  // Utility function to determine if a URL is a video
+  const isVideoUrl = (url) => {
+    return url.match(/\.(mp4|webm|ogg)$/i);
   };
 
   return (
@@ -171,20 +188,39 @@ export default function UserDashboard() {
                           >
                             {combo.name}
                           </Typography>
-                          {combo.content.startsWith('http') ? (
-                            <img 
-                              src={combo.content} 
-                              alt={combo.name} 
-                              style={{ 
-                                width: '100%', 
-                                height: '150px', 
-                                objectFit: 'cover', 
-                                borderRadius: '10px', 
-                                filter: 'brightness(90%)', 
-                                transition: 'filter 0.3s ease-in-out' 
-                              }} 
-                            />
-                          ) : (
+                          {combo.mediaUrl && (
+                            isVideoUrl(combo.mediaUrl) ? (
+                              <video 
+                                src={combo.mediaUrl} 
+                                controls 
+                                style={{ 
+                                  width: '100%', 
+                                  height: '150px', 
+                                  borderRadius: '10px', 
+                                  filter: 'brightness(90%)', 
+                                  transition: 'filter 0.3s ease-in-out', 
+                                  cursor: 'pointer'
+                                }} 
+                                onClick={() => handleOpenMediaDialog(combo.mediaUrl)}
+                              />
+                            ) : (
+                              <img 
+                                src={combo.mediaUrl} 
+                                alt={combo.name} 
+                                style={{ 
+                                  width: '100%', 
+                                  height: '150px', 
+                                  objectFit: 'cover', 
+                                  borderRadius: '10px', 
+                                  filter: 'brightness(90%)', 
+                                  transition: 'filter 0.3s ease-in-out', 
+                                  cursor: 'pointer'
+                                }} 
+                                onClick={() => handleOpenMediaDialog(combo.mediaUrl)}
+                              />
+                            )
+                          )}
+                          {combo.content && (
                             <Typography 
                               variant="body2" 
                               color="textSecondary"
@@ -226,7 +262,7 @@ export default function UserDashboard() {
           open={isComboContentDialogOpen} 
           onClose={handleCloseComboContent} 
           fullWidth 
-          maxWidth="sm" 
+          maxWidth="md" 
           TransitionComponent={Slide} 
           TransitionProps={{ direction: "up" }} 
           PaperProps={{
@@ -247,31 +283,104 @@ export default function UserDashboard() {
             {selectedCombo.name}
           </DialogTitle>
           <DialogContent dividers style={{ padding: '30px' }}>
-            {selectedCombo.content.startsWith('http') ? (
-              <img 
-                src={selectedCombo.content} 
-                alt={selectedCombo.name} 
-                style={{ 
-                  width: '100%', 
-                  height: 'auto', 
-                  objectFit: 'cover', 
-                  borderRadius: '10px', 
-                  filter: 'brightness(90%)', 
-                  transition: 'filter 0.3s ease-in-out' 
-                }} 
-              />
-            ) : (
-              <Typography 
-                variant="body2" 
-                color="textSecondary"
-              >
-                {selectedCombo.content}
-              </Typography>
+            {selectedCombo.mediaUrl && (
+              isVideoUrl(selectedCombo.mediaUrl) ? (
+                <video 
+                  src={selectedCombo.mediaUrl} 
+                  controls 
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto', 
+                    borderRadius: '10px' 
+                  }} 
+                />
+              ) : (
+                <img 
+                  src={selectedCombo.mediaUrl} 
+                  alt={selectedCombo.name} 
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto', 
+                    objectFit: 'contain', 
+                    borderRadius: '10px' 
+                  }} 
+                />
+              )
             )}
+            <TextField
+              label="Name"
+              fullWidth
+              margin="normal"
+              value={selectedCombo.name}
+              InputProps={{ style: { borderRadius: '10px' }, readOnly: true }}
+              variant="outlined"
+            />
+            <TextField
+              label="Content"
+              fullWidth
+              margin="normal"
+              multiline
+              rows={4}
+              value={selectedCombo.content}
+              InputProps={{ style: { borderRadius: '10px' }, readOnly: true }}
+              variant="outlined"
+            />
           </DialogContent>
           <DialogActions style={{ justifyContent: 'center', paddingBottom: '20px' }}>
             <Button 
               onClick={handleCloseComboContent} 
+              color="primary" 
+              variant="outlined" 
+              style={{ padding: '10px 20px', textTransform: 'uppercase' }}
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+
+      {mediaUrl && (
+        <Dialog 
+          open={isMediaDialogOpen} 
+          onClose={handleCloseMediaDialog} 
+          fullWidth 
+          maxWidth="md" 
+          TransitionComponent={Slide} 
+          TransitionProps={{ direction: "up" }} 
+          PaperProps={{
+            style: { 
+              borderRadius: '20px', 
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)' 
+            }
+          }}
+        >
+          <DialogContent style={{ padding: '30px', textAlign: 'center' }}>
+            {isVideoUrl(mediaUrl) ? (
+              <video 
+                src={mediaUrl} 
+                controls 
+                style={{ 
+                  width: '100%', 
+                  height: 'auto', 
+                  borderRadius: '10px' 
+                }} 
+              />
+            ) : (
+              <img 
+                src={mediaUrl} 
+                alt="Media Full Size" 
+                style={{ 
+                  width: '100%', 
+                  height: 'auto', 
+                  objectFit: 'contain', 
+                  borderRadius: '10px' 
+                }} 
+              />
+            )}
+          </DialogContent>
+          <DialogActions style={{ justifyContent: 'center', paddingBottom: '20px' }}>
+            <Button 
+              onClick={handleCloseMediaDialog} 
               color="primary" 
               variant="outlined" 
               style={{ padding: '10px 20px', textTransform: 'uppercase' }}

@@ -85,9 +85,9 @@ export default function AdminDashboard() {
       <Button
         variant="contained"
         color="primary"
-        onClick={selectedGame ? handleUpdateGame : handleAddGame}
+        onClick={ handleAddGame}
       >
-        {selectedGame ? 'Update Game' : 'Add Game'}
+        { 'Add Game'}
       </Button>
 
       <Grid container spacing={3} style={{ marginTop: '20px' }}>
