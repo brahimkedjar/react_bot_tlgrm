@@ -59,6 +59,11 @@ export default function UserDashboard() {
     setMediaUrl(null);
   };
 
+  // Helper function to determine if a URL is a video
+  const isVideoUrl = (url) => {
+    return url.match(/\.(mp4|webm|ogg)$/i);
+  };
+
   return (
     <Container className="container" maxWidth="lg" style={{ padding: '40px 20px' }}>
       <Typography 
@@ -184,20 +189,37 @@ export default function UserDashboard() {
                             {combo.name}
                           </Typography>
                           {combo.mediaUrl && (
-                            <img 
-                              src={combo.mediaUrl} 
-                              alt={combo.name} 
-                              style={{ 
-                                width: '100%', 
-                                height: '150px', 
-                                objectFit: 'cover', 
-                                borderRadius: '10px', 
-                                filter: 'brightness(90%)', 
-                                transition: 'filter 0.3s ease-in-out', 
-                                cursor: 'pointer'
-                              }} 
-                              onClick={() => handleOpenMediaDialog(combo.mediaUrl)}
-                            />
+                            isVideoUrl(combo.mediaUrl) ? (
+                              <video 
+                                controls 
+                                style={{ 
+                                  width: '100%', 
+                                  height: '150px', 
+                                  objectFit: 'cover', 
+                                  borderRadius: '10px', 
+                                  cursor: 'pointer'
+                                }} 
+                                onClick={() => handleOpenMediaDialog(combo.mediaUrl)}
+                              >
+                                <source src={combo.mediaUrl} type="video/mp4" />
+                                Your browser does not support the video tag.
+                              </video>
+                            ) : (
+                              <img 
+                                src={combo.mediaUrl} 
+                                alt={combo.name} 
+                                style={{ 
+                                  width: '100%', 
+                                  height: '150px', 
+                                  objectFit: 'cover', 
+                                  borderRadius: '10px', 
+                                  filter: 'brightness(90%)', 
+                                  transition: 'filter 0.3s ease-in-out', 
+                                  cursor: 'pointer'
+                                }} 
+                                onClick={() => handleOpenMediaDialog(combo.mediaUrl)}
+                              />
+                            )
                           )}
                           {combo.content && (
                             <Typography 
@@ -263,17 +285,33 @@ export default function UserDashboard() {
           </DialogTitle>
           <DialogContent dividers style={{ padding: '30px' }}>
             {selectedCombo.mediaUrl && (
-              <img 
-                src={selectedCombo.mediaUrl} 
-                alt={selectedCombo.name} 
-                style={{ 
-                  width: '100%', 
-                  height: 'auto', 
-                  objectFit: 'contain', 
-                  marginBottom: '20px' 
-                }} 
-                onClick={() => handleOpenMediaDialog(selectedCombo.mediaUrl)}
-              />
+              isVideoUrl(selectedCombo.mediaUrl) ? (
+                <video 
+                  controls 
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto', 
+                    objectFit: 'contain', 
+                    marginBottom: '20px' 
+                  }} 
+                  onClick={() => handleOpenMediaDialog(selectedCombo.mediaUrl)}
+                >
+                  <source src={selectedCombo.mediaUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <img 
+                  src={selectedCombo.mediaUrl} 
+                  alt={selectedCombo.name} 
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto', 
+                    objectFit: 'contain', 
+                    marginBottom: '20px' 
+                  }} 
+                  onClick={() => handleOpenMediaDialog(selectedCombo.mediaUrl)}
+                />
+              )
             )}
             {selectedCombo.content && (
               <Typography 
@@ -319,19 +357,33 @@ export default function UserDashboard() {
             color: '#3f51b5' 
           }}
         >
-          Combo Image
+          Combo Media
         </DialogTitle>
         <DialogContent dividers style={{ padding: '30px' }}>
           {mediaUrl && (
-            <img 
-              src={mediaUrl} 
-              alt="Combo Media" 
-              style={{ 
-                width: '100%', 
-                height: 'auto', 
-                objectFit: 'contain' 
-              }}
-            />
+            isVideoUrl(mediaUrl) ? (
+              <video 
+                controls 
+                style={{ 
+                  width: '100%', 
+                  height: 'auto', 
+                  objectFit: 'contain' 
+                }}
+              >
+                <source src={mediaUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img 
+                src={mediaUrl} 
+                alt="Combo Media" 
+                style={{ 
+                  width: '100%', 
+                  height: 'auto', 
+                  objectFit: 'contain' 
+                }}
+              />
+            )
           )}
         </DialogContent>
         <DialogActions style={{ justifyContent: 'center', paddingBottom: '20px' }}>
