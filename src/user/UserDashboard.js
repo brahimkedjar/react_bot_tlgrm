@@ -72,7 +72,7 @@ export default function UserDashboard() {
         align="center" 
         style={{ fontWeight: 'bold', marginBottom: '15px', color: '#3f51b5', textTransform: 'uppercase', letterSpacing: '2px' }}
       >
-        Available Games By Brahim Kedjar Dev
+        Available Games 
       </Typography>
       <Grid container spacing={4}>
         {games.map((game) => (
